@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /demo-web
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/simpel_dev
+    username: root
+    password: 1234
