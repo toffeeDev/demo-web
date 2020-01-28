@@ -1,10 +1,6 @@
 package com.top.demoweb.constant;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 public class CommonConstants {
-
 
   // Spring Profiles
   public static final class PROFILE {
