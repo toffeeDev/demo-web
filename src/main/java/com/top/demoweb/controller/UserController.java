@@ -3,11 +3,12 @@ package com.top.demoweb.controller;
 import com.top.demoweb.dto.UserDto;
 import com.top.demoweb.entity.UserEntity;
 import com.top.demoweb.service.UserService;
-import java.util.List;
+import com.top.demoweb.util.ResponseUtils;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,19 @@ public class UserController {
   }
 
   @GetMapping("/all")
-  public List<UserDto> getUserAll() {
+  public ResponseEntity<ResponseUtils> getUserAll() {
     UserController.log.info("getUserAll");
-    return userService.userAll();
+    return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.result(userService.userAll()));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUserById(@PathVariable Long id) {
+  public ResponseEntity<ResponseUtils> getUserById(@PathVariable Long id) {
     UserController.log.info("getUserById");
     Optional<UserEntity> user = userService.userById(id);
     if (!user.isPresent()) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.notFound("NO_DATA"));
     }
-    return ResponseEntity.ok(modelMapper.map(user.get(), UserDto.class));
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(ResponseUtils.result(modelMapper.map(user.get(), UserDto.class)));
   }
 }

@@ -12,4 +12,11 @@ public class CommonConstants {
     // Unit Test
     public static final String UNITTEST = "unittest";
   }
+
+  // Spring MassageError
+  public static final class MASSAGE_ERROR {
+    public static final String ERM0001 = "ERM0001";
+    public static final String ERM0002 = "ERM0002";
+    public static final String ERM0003 = "ERM0003";
+  }
 }
