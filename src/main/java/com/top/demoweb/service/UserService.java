@@ -5,7 +5,9 @@ import com.top.demoweb.entity.UserEntity;
 import com.top.demoweb.repository.UserRepository;
 import com.top.demoweb.util.ObjectMapperUtils;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,6 +16,7 @@ public class UserService {
 
   private final UserRepository userRepository;
 
+  @Autowired
   public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
@@ -23,7 +26,7 @@ public class UserService {
     return ObjectMapperUtils.mapAll(listUserEntity, UserDto.class);
   }
 
-
-
-
+  public Optional<UserEntity> userById(Long id) {
+    return userRepository.findById(id);
+  }
 }
