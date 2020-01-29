@@ -1,6 +1,5 @@
 package com.top.demoweb.entity;
 
-import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +10,17 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "user", schema = "simpel_dev")
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,30 +32,10 @@ public class UserEntity {
   private String userName;
 
   @Basic
-  @Column(name = "password", length = 45)
+  @Column(name = "password", length = 10)
   private String password;
 
   @Basic
   @Column(name = "email", length = 45)
   private String email;
-
-  @Basic
-  @Column(name = "status", nullable = false, length = 1)
-  private String status;
-
-  @Basic
-  @Column(name = "create_by", length = 45)
-  private String createBy;
-
-  @Basic
-  @Column(name = "create_dt", nullable = false)
-  private Timestamp createDt;
-
-  @Basic
-  @Column(name = "update_by", length = 45)
-  private String updateBy;
-
-  @Basic
-  @Column(name = "update_dt", nullable = false)
-  private Timestamp updateDt;
 }

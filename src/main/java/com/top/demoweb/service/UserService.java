@@ -6,7 +6,9 @@ import com.top.demoweb.repository.UserRepository;
 import com.top.demoweb.util.ObjectMapperUtils;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+  private final ModelMapper modelMapper;
   private final UserRepository userRepository;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(ModelMapper modelMapper, UserRepository userRepository) {
+    this.modelMapper = modelMapper;
     this.userRepository = userRepository;
   }
 
@@ -28,5 +32,11 @@ public class UserService {
 
   public Optional<UserEntity> userById(Long id) {
     return userRepository.findById(id);
+  }
+
+  @Transactional(rollbackOn = {Exception.class})
+  public void createUser(UserDto userDto) {
+    userDto.setId(null);
+    userRepository.save(modelMapper.map(userDto, UserEntity.class));
   }
 }
