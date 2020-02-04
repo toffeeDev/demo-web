@@ -34,9 +34,15 @@ public class UserService {
     return userRepository.findById(id);
   }
 
+  public Long countUserName() {
+    return userRepository.getCountUserName();
+  }
+
   @Transactional(rollbackOn = {Exception.class})
   public void createUser(UserDto userDto) {
     userDto.setId(null);
     userRepository.save(modelMapper.map(userDto, UserEntity.class));
   }
+
+
 }

@@ -82,4 +82,18 @@ public class UserController {
     UserController.log.info("createUser");
     return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.create());
   }
+
+  @GetMapping("/count")
+  @ApiOperation(value = "Get Count User", response = UserDto.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> getCountUser() {
+    UserController.log.info("getCountUser");
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(ResponseUtils.result(userService.countUserName()));
+  }
 }
