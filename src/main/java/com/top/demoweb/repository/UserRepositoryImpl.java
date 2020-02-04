@@ -21,7 +21,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     try {
       return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
     } catch (EmptyResultDataAccessException e) {
-      throw null;
+      return new Long("0");
     }
   }
 }
