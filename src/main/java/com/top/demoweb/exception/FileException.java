@@ -1,5 +1,9 @@
 package com.top.demoweb.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class FileException extends RuntimeException {
   public FileException(String message) {
     super(message);

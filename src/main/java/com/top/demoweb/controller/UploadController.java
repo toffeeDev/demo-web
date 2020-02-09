@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,23 @@ public class UploadController {
   public ResponseEntity<ResponseUtils> singleFileUpload(@RequestParam("file") MultipartFile file) {
     UploadController.log.info("singleFileUpload()");
     Path path = uploadService.singleFileUpload(file);
+    return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.custom(path, "Success upload"));
+  }
+
+  @GetMapping("/list-upload-file")
+  @ApiOperation(
+      value = "listUploadedFiles",
+      response = ResponseUtils.class,
+      responseContainer = "List")
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> listUploadedFiles() {
+    UploadController.log.info("listUploadedFiles");
     return ResponseEntity.status(HttpStatus.OK)
-        .body(ResponseUtils.custom(path, "Success upload"));
+        .body(ResponseUtils.result(uploadService.listUploadedFiles()));
   }
 }

@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +58,20 @@ public class FilesUtils {
       } else {
         FilesUtils.log.error(path + " : Failed to create directory!");
       }
+    }
+  }
+
+  // ------------------------ load-file-All -----------------------------
+  public static Stream<Path> loadFileAll(String filePath) {
+    creatDirectoryPath(filePath);
+
+    Path pathFile = Paths.get(filePath);
+    try {
+      return Files.walk(pathFile, 1)
+          .filter(path -> !path.equals(pathFile))
+          .map(pathFile::relativize);
+    } catch (IOException e) {
+      throw new FileException("Failed to read stored files", e);
     }
   }
 }
