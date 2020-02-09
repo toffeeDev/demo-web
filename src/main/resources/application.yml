@@ -7,9 +7,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
 
   datasource:
     url: jdbc:mysql://localhost:3306/simpel_dev
     username: root
     password: 1234
 
+
+# Upload File Path
+#config-path.upload-file.demo-web: /home/ubuntu/demo-service/upload/demo-web/
+config-path:
+  upload-file:
+    demo-web: D:\upload-path\
