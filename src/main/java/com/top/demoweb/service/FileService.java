@@ -32,4 +32,9 @@ public class FileService {
   public void deleteFileAll(){
     FilesUtils.deleteAll(uploadFilePath);
   }
+
+  public void deleteFileByFileName(String filename){
+    FilesUtils.delete(filename,uploadFilePath);
+  }
+
 }

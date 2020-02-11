@@ -51,7 +51,7 @@ public class FileController {
     return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.custom(path, "Success upload"));
   }
 
-  @GetMapping("/list-file")
+  @GetMapping("/list")
   @ApiOperation(value = "List Files", response = ResponseUtils.class, responseContainer = "List")
   @ApiResponses(
       value = {
@@ -60,7 +60,7 @@ public class FileController {
         @ApiResponse(code = 500, message = "Error")
       })
   public ResponseEntity<ResponseUtils> listFiles() {
-    FileController.log.info("listFiles");
+    FileController.log.info("list");
     return ResponseEntity.status(HttpStatus.OK)
         .body(ResponseUtils.result(fileService.listUploadedFiles()));
   }
@@ -86,18 +86,28 @@ public class FileController {
   }
 
   @DeleteMapping("/delete/all")
-  @ApiOperation(
-      value = "Delete Files ALL",
-      response = ResponseUtils.class,
-      responseContainer = "List")
+  @ApiOperation(value = "Delete Files ALL", response = void.class)
   @ApiResponses(
       value = {
         @ApiResponse(code = 400, message = "Something went wrong"),
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Error")
       })
-  public ResponseEntity<ResponseUtils> deleteFilesAll(@PathVariable Long id) {
+  public ResponseEntity<ResponseUtils> deleteFilesAll() {
     fileService.deleteFileAll();
+    return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.delete());
+  }
+
+  @DeleteMapping("/delete/{filename:.+}")
+  @ApiOperation(value = "Delete Files", response = void.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> deleteFiles(@PathVariable String filename) {
+    fileService.deleteFileByFileName(filename);
     return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.delete());
   }
 }

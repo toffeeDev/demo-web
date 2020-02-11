@@ -110,4 +110,9 @@ public class FilesUtils {
   public static void deleteAll(String filePath) {
     FileSystemUtils.deleteRecursively(creatDirectoryPath(filePath).toFile());
   }
+  // ------------------------ delete-----------------------------
+  public static void delete(String filename, String filePath) {
+    FileSystemUtils.deleteRecursively(
+        targetLocation(creatDirectoryPath(filePath), filename).toFile());
+  }
 }
