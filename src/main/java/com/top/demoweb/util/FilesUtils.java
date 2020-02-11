@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,5 +104,10 @@ public class FilesUtils {
     } catch (MalformedURLException e) {
       throw new FileNotFoundException("Could not read file: " + filename, e);
     }
+  }
+
+  // ------------------------ deleteAll -----------------------------
+  public static void deleteAll(String filePath) {
+    FileSystemUtils.deleteRecursively(creatDirectoryPath(filePath).toFile());
   }
 }

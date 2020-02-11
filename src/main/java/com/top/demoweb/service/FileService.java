@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class UploadService {
+public class FileService {
 
   @Value("${config-path.upload-file.demo-web}")
   private String uploadFilePath;
@@ -27,5 +27,9 @@ public class UploadService {
 
   public Resource serveFile(String filename) {
     return FilesUtils.loadAsResource(filename, uploadFilePath);
+  }
+
+  public void deleteFileAll(){
+    FilesUtils.deleteAll(uploadFilePath);
   }
 }
