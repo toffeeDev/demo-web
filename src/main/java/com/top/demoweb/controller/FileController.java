@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -49,6 +51,28 @@ public class FileController {
     FileController.log.info("uploadSingleFile()");
     Path path = fileService.singleFileUpload(file);
     return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.custom(path, "Success upload"));
+  }
+
+  @PostMapping("upload/multiple-file")
+  @ResponseStatus(HttpStatus.OK)
+  @ApiOperation(value = "Upload Single File", response = void.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> uploadMultipleFile(
+      @RequestParam("files") MultipartFile[] files) {
+    FileController.log.info("uploadMultipleFile()");
+
+    List<Path> pathList = new ArrayList<>();
+    for (MultipartFile file : files) {
+      pathList.add(fileService.singleFileUpload(file));
+    }
+
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(ResponseUtils.custom(pathList, "Success upload"));
   }
 
   @GetMapping("/list")
