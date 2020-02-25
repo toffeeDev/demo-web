@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -173,5 +174,23 @@ public class FileController {
         .header(
             HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
         .body(IOUtils.toByteArray(file.getInputStream()));
+  }
+
+  @GetMapping(value = "/get-image-base64/{filename:.+}")
+  @ApiOperation(value = "Get Image Base64", response = ResponseUtils.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> getImageBase64(@PathVariable String filename)
+      throws IOException {
+    Resource file = fileService.serveFile(filename);
+    String base64 = Base64.getEncoder().encodeToString(IOUtils.toByteArray(file.getInputStream()));
+    return ResponseEntity.ok()
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+        .body(ResponseUtils.result(base64));
   }
 }
