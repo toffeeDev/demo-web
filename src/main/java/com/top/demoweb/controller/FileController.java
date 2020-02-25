@@ -6,14 +6,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -133,5 +136,42 @@ public class FileController {
   public ResponseEntity<ResponseUtils> deleteFiles(@PathVariable String filename) {
     fileService.deleteFileByFileName(filename);
     return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.delete());
+  }
+
+  @GetMapping(
+      value = "/get-image/{filename:.+}",
+      produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  @ApiOperation(value = "Get Image", response = ResponseUtils.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<byte[]> getImage(@PathVariable String filename) throws IOException {
+    Resource file = fileService.serveFile(filename);
+    return ResponseEntity.ok()
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+        .body(IOUtils.toByteArray(file.getInputStream()));
+  }
+
+  @GetMapping(
+      value = "/get-image-with-media-type/{filename:.+}",
+      produces = MediaType.IMAGE_JPEG_VALUE)
+  @ApiOperation(value = "Get Image With Media Type", response = ResponseUtils.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable String filename)
+      throws IOException {
+    Resource file = fileService.serveFile(filename);
+    return ResponseEntity.ok()
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+        .body(IOUtils.toByteArray(file.getInputStream()));
   }
 }
