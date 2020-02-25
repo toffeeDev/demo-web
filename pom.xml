@@ -23,6 +23,7 @@
     <java.version>1.8</java.version>
     <swagger.version>2.9.2</swagger.version>
     <commons.lang3.version>3.9</commons.lang3.version>
+    <commons.io.version>2.6</commons.io.version>
     <model.mapper.version>2.3.5</model.mapper.version>
     <spring.security.version>5.2.1.RELEASE</spring.security.version>
     <jjwt.version>0.9.0</jjwt.version>
@@ -82,6 +83,13 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${commons.lang3.version}</version>
+    </dependency>
+
+    <!-- commons-io -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons.io.version}</version>
     </dependency>
 
     <!-- swagger -->
