@@ -45,9 +45,9 @@ public abstract class BaseEntity {
 
   @PreUpdate
   public void preUpdate() {
-    if (StringUtils.isBlank(updateBy)) {
-      updateBy = UserLoginUtils.getCurrentUsername();
-    }
+
+    updateBy = UserLoginUtils.getCurrentUsername();
+
     updateDt = new Timestamp(System.currentTimeMillis());
   }
 }

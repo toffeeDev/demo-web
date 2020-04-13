@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,8 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
   private final ModelMapper modelMapper;
   private final UserService userService;
-
-
 
   @Autowired
   public UserController(ModelMapper modelMapper, UserService userService) {
@@ -83,6 +82,21 @@ public class UserController {
     userService.createUser(body);
     UserController.log.info("createUser");
     return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.create());
+  }
+
+  @PutMapping("/update")
+  @ResponseStatus(HttpStatus.OK)
+  @ApiOperation(value = "Create User", response = void.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 400, message = "Something went wrong"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error")
+      })
+  public ResponseEntity<ResponseUtils> updateUser(@Valid @RequestBody UserDto body) {
+    userService.updateUser(body);
+    UserController.log.info("updateUser");
+    return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.update());
   }
 
   @GetMapping("/count")

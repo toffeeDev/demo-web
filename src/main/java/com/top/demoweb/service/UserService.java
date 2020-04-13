@@ -44,5 +44,12 @@ public class UserService {
     userRepository.save(modelMapper.map(userDto, UserEntity.class));
   }
 
-
+  @Transactional(rollbackOn = {Exception.class})
+  public void updateUser(UserDto userDto) {
+    UserEntity entity = userRepository.findById(userDto.getId()).get();
+    entity.setUserName(userDto.getUserName());
+    entity.setPassword(userDto.getPassword());
+    entity.setEmail(userDto.getEmail());
+    userRepository.save(entity);
+  }
 }
